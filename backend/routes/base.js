@@ -1,13 +1,56 @@
 const express = require("express");
 const router = express.Router();
+
 const db = require("../db");
+
+/*
+==========================================
+CREATE TABLE
+==========================================
+*/
+
+async function createTable() {
+
+    try {
+
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS base (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                country VARCHAR(100),
+                city VARCHAR(100),
+                category VARCHAR(100),
+                coordinates VARCHAR(100),
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        console.log("Table base is ready");
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+createTable();
+
+/*
+==========================================
+GET ALL DATA
+/api/base
+==========================================
+*/
 
 router.get("/", async (req, res) => {
 
     try {
 
         const result = await db.query(
-            "SELECT * FROM markets ORDER BY id"
+            "SELECT * FROM base ORDER BY id DESC"
         );
 
         res.json(result.rows);
@@ -17,12 +60,19 @@ router.get("/", async (req, res) => {
         console.error(error);
 
         res.status(500).json({
-            error: "Server error"
+            error: "Database error"
         });
 
     }
 
 });
+
+/*
+==========================================
+ADD NEW RECORD
+/api/base
+==========================================
+*/
 
 router.post("/", async (req, res) => {
 
@@ -33,26 +83,24 @@ router.post("/", async (req, res) => {
             country,
             city,
             category,
-            latitude,
-            longitude,
+            coordinates,
             description
         } = req.body;
 
         const result = await db.query(
             `
-            INSERT INTO markets
+            INSERT INTO base
             (
                 name,
                 country,
                 city,
                 category,
-                latitude,
-                longitude,
+                coordinates,
                 description
             )
             VALUES
             (
-                $1,$2,$3,$4,$5,$6,$7
+                $1,$2,$3,$4,$5,$6
             )
             RETURNING *
             `,
@@ -61,8 +109,7 @@ router.post("/", async (req, res) => {
                 country,
                 city,
                 category,
-                latitude,
-                longitude,
+                coordinates,
                 description
             ]
         );
@@ -74,19 +121,26 @@ router.post("/", async (req, res) => {
         console.error(error);
 
         res.status(500).json({
-            error: "Server error"
+            error: "Insert error"
         });
 
     }
 
 });
 
+/*
+==========================================
+DELETE RECORD
+/api/base/:id
+==========================================
+*/
+
 router.delete("/:id", async (req, res) => {
 
     try {
 
         await db.query(
-            "DELETE FROM markets WHERE id=$1",
+            "DELETE FROM base WHERE id = $1",
             [req.params.id]
         );
 
@@ -99,7 +153,7 @@ router.delete("/:id", async (req, res) => {
         console.error(error);
 
         res.status(500).json({
-            error: "Server error"
+            error: "Delete error"
         });
 
     }
