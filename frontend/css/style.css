@@ -76,3 +76,73 @@ body {
 .leaflet-popup-content p {
     margin-bottom: 5px;
 }
+
+#toggleSidebarBtn {
+
+    width: 100%;
+    padding: 10px;
+
+    margin-bottom: 15px;
+
+    border: none;
+
+    cursor: pointer;
+}
+
+#searchInput {
+
+    width: 100%;
+
+    padding: 10px;
+
+    margin-bottom: 15px;
+}
+
+#coordinatesBox {
+
+    background: #0f172a;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    margin-bottom: 15px;
+}
+
+#objectList {
+
+    margin-top: 15px;
+
+    max-height: 300px;
+
+    overflow-y: auto;
+}
+
+.object-card {
+
+    background: #334155;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    margin-bottom: 10px;
+}
+
+.object-card button {
+
+    width: 100%;
+
+    margin-top: 5px;
+
+    padding: 6px;
+}
+
+.sidebar.collapsed {
+
+    width: 0;
+
+    padding: 0;
+
+    overflow: hidden;
+}
