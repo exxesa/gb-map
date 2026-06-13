@@ -1,38 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<title>Global Market Map</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <title>GB Map</title>
 
-<link rel="stylesheet"
-href="css/style.css">
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+    <link
+        rel="stylesheet"
+        href="css/style.css">
 
 </head>
 
 <body>
 
-<div class="sidebar">
+    <!-- SIDEBAR -->
 
-<h2>Global Markets</h2>
+    <div class="sidebar">
 
-<button onclick="showAddForm()">
-Add Market
-</button>
+        <h1>GB Map</h1>
 
-</div>
+        <p>
+            Click on the map and add a new object.
+        </p>
 
-<div id="map"></div>
+        <input
+            type="text"
+            id="name"
+            placeholder="Name">
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <input
+            type="text"
+            id="country"
+            placeholder="Country">
 
-<script src="js/map.js"></script>
-<script src="js/markets.js"></script>
-<script src="js/sidebar.js"></script>
+        <input
+            type="text"
+            id="city"
+            placeholder="City">
+
+        <input
+            type="text"
+            id="category"
+            placeholder="Category">
+
+        <textarea
+            id="description"
+            placeholder="Description">
+        </textarea>
+
+        <button id="saveButton">
+            Save Object
+        </button>
+
+    </div>
+
+    <!-- MAP -->
+
+    <div id="map"></div>
+
+    <!-- LEAFLET -->
+
+    <script
+        src="https://unpkg.com/leaflet/dist/leaflet.js">
+    </script>
+
+    <!-- PROJECT FILES -->
+
+    <script src="js/connection.js"></script>
+
+    <script src="js/map.js"></script>
+
+    <script src="js/sidebar.js"></script>
 
 </body>
+
 </html>
