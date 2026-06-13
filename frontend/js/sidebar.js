@@ -102,3 +102,21 @@ if (saveButton) {
     );
 
 }
+
+const toggleButton =
+    document.getElementById(
+        "toggleSidebarBtn"
+    );
+
+toggleButton.addEventListener(
+    "click",
+    () => {
+
+        document
+        .querySelector(".sidebar")
+        .classList.toggle(
+            "collapsed"
+        );
+
+    }
+);
