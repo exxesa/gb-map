@@ -77,15 +77,19 @@ let selectedCoordinates = null;
 
 map.on("click", function(event) {
 
-    const lat = event.latlng.lat.toFixed(6);
-    const lng = event.latlng.lng.toFixed(6);
+    const lat =
+        event.latlng.lat.toFixed(6);
 
-    selectedCoordinates = `${lat},${lng}`;
+    const lng =
+        event.latlng.lng.toFixed(6);
 
-    console.log(
-        "Selected coordinates:",
-        selectedCoordinates
-    );
+    selectedCoordinates =
+        `${lat},${lng}`;
+
+    coordinatesText.innerHTML = `
+        Lat: ${lat}<br>
+        Lng: ${lng}
+    `;
 
 });
 
