@@ -1,17 +1,25 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 
-const marketRoutes = require("./routes/markets");
+const baseRoutes = require("./routes/base");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/markets", marketRoutes);
+app.use("/api/base", baseRoutes);
 
-const PORT = process.env.PORT || 5000;
+app.get("/", (req, res) => {
+res.json({
+message: "GB Map API is running"
+});
+});
+
+const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+console.log(`Server started on port ${PORT}`);
 });
