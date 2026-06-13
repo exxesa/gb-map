@@ -37,31 +37,69 @@ LOAD ALL POINTS FROM DATABASE
 
 async function loadBasePoints() {
 
-    const data = await getBaseData();
+    const data =
+        await getBaseData();
+
+    objectList.innerHTML = "";
 
     data.forEach(item => {
 
-        if (!item.coordinates) return;
+        if (!item.coordinates)
+            return;
 
         const [lat, lng] =
             item.coordinates.split(",");
 
-        L.marker([
-            parseFloat(lat),
-            parseFloat(lng)
-        ])
-        .addTo(map)
-        .bindPopup(`
-            <h3>${item.name}</h3>
+        const marker =
+            L.marker([
+                parseFloat(lat),
+                parseFloat(lng)
+            ])
+            .addTo(map)
+            .bindPopup(`
+                <h3>${item.name}</h3>
 
-            <p><b>Country:</b> ${item.country}</p>
+                <p>
+                🌍 ${item.country}
+                </p>
 
-            <p><b>City:</b> ${item.city}</p>
+                <p>
+                🏙 ${item.city}
+                </p>
 
-            <p><b>Category:</b> ${item.category}</p>
+                <p>
+                📂 ${item.category}
+                </p>
 
-            <p>${item.description}</p>
-        `);
+                <p>
+                ${item.description}
+                </p>
+            `);
+
+        objectList.innerHTML += `
+            <div class="object-card">
+
+                <b>${item.name}</b>
+
+                <p>
+                ${item.country}
+                </p>
+
+                <button
+                    onclick="
+                    map.flyTo(
+                    [${lat},${lng}],
+                    10
+                    );
+                    marker.openPopup();
+                    ">
+
+                    Go To
+
+                </button>
+
+            </div>
+        `;
 
     });
 
