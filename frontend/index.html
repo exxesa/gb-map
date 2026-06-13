@@ -5,19 +5,16 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>GB Map</title>
 
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet/dist/leaflet.css">
 
-    <link
-        rel="stylesheet"
-        href="css/style.css">
+    <link rel="stylesheet"
+          href="css/style.css">
 
 </head>
 
@@ -25,26 +22,26 @@
 
     <!-- SIDEBAR -->
 
-    <button id="toggleSidebarBtn">
-    ☰ Hide Panel
-</button>
-
-<input
-    type="text"
-    id="searchInput"
-    placeholder="Search object...">
-
-<div id="coordinatesBox">
-
-    <h3>Coordinates</h3>
-
-    <p id="coordinatesText">
-        Click on map
-    </p>
-
-</div>
-
     <div class="sidebar">
+
+        <button id="toggleSidebarBtn">
+            ☰ Hide Panel
+        </button>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search object...">
+
+        <div id="coordinatesBox">
+
+            <h3>Coordinates</h3>
+
+            <p id="coordinatesText">
+                Click on map
+            </p>
+
+        </div>
 
         <h1>GB Map</h1>
 
@@ -74,12 +71,13 @@
 
         <textarea
             id="description"
-            placeholder="Description">
-        </textarea>
+            placeholder="Description"></textarea>
 
         <button id="saveButton">
             Save Object
         </button>
+
+        <div id="objectList"></div>
 
     </div>
 
@@ -89,16 +87,12 @@
 
     <!-- LEAFLET -->
 
-    <script
-        src="https://unpkg.com/leaflet/dist/leaflet.js">
-    </script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <!-- PROJECT FILES -->
 
     <script src="js/connection.js"></script>
-
     <script src="js/map.js"></script>
-
     <script src="js/sidebar.js"></script>
 
 </body>
