@@ -1,3 +1,12 @@
+const coordinatesText =
+    document.getElementById(
+        "coordinatesText"
+    );
+
+const objectList =
+    document.getElementById(
+        "objectList"
+    );
 /*
 ==========================================
 WORLD MAP INITIALIZATION
