@@ -3,6 +3,26 @@
 FORM ELEMENTS
 ==========================================
 */
+<button id="toggleSidebarBtn">
+    ☰ Hide Panel
+</button>
+
+<input
+    type="text"
+    id="searchInput"
+    placeholder="Search object...">
+
+<div id="coordinatesBox">
+
+    <h3>Coordinates</h3>
+
+    <p id="coordinatesText">
+        Click on map
+    </p>
+
+</div>
+
+<div id="objectList"></div>
 
 const addButton =
     document.getElementById("addButton");
