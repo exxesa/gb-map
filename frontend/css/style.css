@@ -13,7 +13,7 @@ body {
 
     overflow: hidden;
 
-    font-family: Arial, sans-serif;
+    font-family: "Segoe UI", sans-serif;
 
     background: #0f172a;
 }
@@ -26,7 +26,7 @@ LEFT PANEL
 
 .left-panel {
 
-    width: 320px;
+    width: 280px;
 
     background: #1e293b;
 
@@ -37,6 +37,9 @@ LEFT PANEL
     overflow-y: auto;
 
     transition: 0.3s;
+
+    border-right:
+        1px solid rgba(255,255,255,0.08);
 }
 
 .left-panel.hidden {
@@ -51,6 +54,8 @@ LEFT PANEL
 .left-panel h1 {
 
     margin-bottom: 20px;
+
+    font-size: 42px;
 }
 
 /*
@@ -67,9 +72,11 @@ SEARCH
 
     border: none;
 
-    border-radius: 8px;
+    border-radius: 12px;
 
     margin-bottom: 20px;
+
+    background: #f8fafc;
 }
 
 /*
@@ -84,43 +91,61 @@ OBJECT LIST
 
     flex-direction: column;
 
-    gap: 10px;
+    gap: 12px;
 }
 
 .object-card {
 
     background: #334155;
 
-    border-radius: 10px;
+    border-radius: 14px;
 
-    padding: 12px;
+    padding: 14px;
+
+    transition: 0.2s;
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+}
+
+.object-card:hover {
+
+    transform: translateY(-2px);
+
+    background: #3b4a61;
 }
 
 .object-card h4 {
 
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+
+    font-size: 26px;
 }
 
 .object-card p {
 
     margin-bottom: 10px;
+
+    color: #cbd5e1;
 }
 
 .object-card button {
 
     width: 100%;
 
-    padding: 8px;
+    padding: 10px;
 
     border: none;
 
-    border-radius: 6px;
+    border-radius: 10px;
 
     cursor: pointer;
 
     background: #2563eb;
 
     color: white;
+
+    font-weight: bold;
 }
 
 /*
@@ -155,7 +180,7 @@ MAP BUTTONS
 
     top: 80px;
 
-    left: 10px;
+    left: 12px;
 
     z-index: 1000;
 
@@ -163,26 +188,34 @@ MAP BUTTONS
 
     flex-direction: column;
 
-    gap: 10px;
+    gap: 8px;
 }
 
 #mapControls button {
 
-    width: 45px;
+    width: 36px;
 
-    height: 45px;
+    height: 36px;
 
     border: none;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
     background: white;
 
     cursor: pointer;
 
-    font-size: 20px;
+    font-size: 18px;
 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.15);
+
+    transition: 0.2s;
+}
+
+#mapControls button:hover {
+
+    transform: scale(1.05);
 }
 
 /*
@@ -193,7 +226,7 @@ RIGHT PANEL
 
 .right-panel {
 
-    width: 320px;
+    width: 280px;
 
     background: #1e293b;
 
@@ -204,6 +237,9 @@ RIGHT PANEL
     overflow-y: auto;
 
     transition: 0.3s;
+
+    border-left:
+        1px solid rgba(255,255,255,0.08);
 }
 
 .right-panel.hidden {
@@ -218,6 +254,8 @@ RIGHT PANEL
 .right-panel h2 {
 
     margin-bottom: 20px;
+
+    font-size: 36px;
 }
 
 /*
@@ -238,7 +276,21 @@ FORM
 
     border: none;
 
-    border-radius: 8px;
+    border-radius: 12px;
+
+    background: #f8fafc;
+
+    transition: 0.2s;
+}
+
+.right-panel input:focus,
+.right-panel textarea:focus,
+.right-panel select:focus {
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px rgba(59,130,246,0.4);
 }
 
 .right-panel textarea {
@@ -252,19 +304,33 @@ FORM
 
     width: 100%;
 
-    padding: 12px;
+    padding: 14px;
 
     border: none;
 
-    border-radius: 8px;
+    border-radius: 12px;
 
     cursor: pointer;
 
-    background: #2563eb;
+    background:
+        linear-gradient(
+            135deg,
+            #3b82f6,
+            #2563eb
+        );
 
     color: white;
 
     font-size: 16px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+#saveButton:hover {
+
+    transform: translateY(-2px);
 }
 
 /*
