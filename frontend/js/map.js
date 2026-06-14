@@ -1,11 +1,23 @@
 const objectList =
-    document.getElementById("objectList");
+    document.getElementById(
+        "objectList"
+    );
 
 const searchInput =
-    document.getElementById("searchInput");
+    document.getElementById(
+        "searchInput"
+    );
 
-const coordinatesInput =
-    document.getElementById("coordinates");
+const mapCoordinatesInput =
+    document.getElementById(
+        "coordinates"
+    );
+
+/*
+==========================================
+MAP
+==========================================
+*/
 
 const map =
     L.map("map")
@@ -15,12 +27,26 @@ L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
         maxZoom: 19,
-        attribution: "&copy; OpenStreetMap"
+        attribution:
+            "&copy; OpenStreetMap"
     }
 ).addTo(map);
 
+/*
+==========================================
+GLOBAL VARIABLES
+==========================================
+*/
+
 let selectedCoordinates = null;
+
 let allObjects = [];
+
+/*
+==========================================
+CATEGORY ICON
+==========================================
+*/
 
 function getCategoryEmoji(category) {
 
@@ -28,7 +54,14 @@ function getCategoryEmoji(category) {
         return "📍";
 
     return category.split(" ")[0];
+
 }
+
+/*
+==========================================
+LOAD OBJECTS
+==========================================
+*/
 
 async function loadBasePoints() {
 
@@ -65,55 +98,118 @@ async function loadBasePoints() {
                     parseFloat(lat),
                     parseFloat(lng)
                 ],
-                { icon }
+                {
+                    icon
+                }
             )
-            .addTo(map)
-            .bindPopup(`
-                <h3>${item.name}</h3>
-                <p>🌍 ${item.country}</p>
-                <p>🏙 ${item.city}</p>
-                <p>${item.category}</p>
-                <p>${item.description}</p>
-            `);
+            .addTo(map);
 
-        objectList.innerHTML += `
-            <div class="object-card">
-                <h4>${emoji} ${item.name}</h4>
+        marker.bindPopup(`
+            <h3>${item.name}</h3>
 
-                <p>${item.country}</p>
+            <p>
+                🌍 ${item.country}
+            </p>
 
-                <button onclick="
-                    map.flyTo(
-                        [${lat},${lng}],
-                        12
-                    );
-                    marker.openPopup();
-                ">
-                    Go To
-                </button>
-            </div>
+            <p>
+                🏙 ${item.city}
+            </p>
+
+            <p>
+                ${item.category}
+            </p>
+
+            <p>
+                ${item.description}
+            </p>
+        `);
+
+        const card =
+            document.createElement(
+                "div"
+            );
+
+        card.className =
+            "object-card";
+
+        card.innerHTML = `
+            <h4>
+                ${emoji}
+                ${item.name}
+            </h4>
+
+            <p>
+                ${item.country}
+            </p>
+
+            <button>
+                Go To
+            </button>
         `;
+
+        card
+            .querySelector("button")
+            .addEventListener(
+                "click",
+                () => {
+
+                    map.flyTo(
+                        [
+                            parseFloat(lat),
+                            parseFloat(lng)
+                        ],
+                        10
+                    );
+
+                    marker.openPopup();
+
+                }
+            );
+
+        objectList.appendChild(
+            card
+        );
+
     });
+
 }
 
-map.on("click", function(event) {
+/*
+==========================================
+MAP CLICK
+==========================================
+*/
 
-    const lat =
-        event.latlng.lat.toFixed(6);
+map.on(
+    "click",
+    function(event) {
 
-    const lng =
-        event.latlng.lng.toFixed(6);
+        const lat =
+            event.latlng.lat.toFixed(6);
 
-    selectedCoordinates =
-        `${lat},${lng}`;
+        const lng =
+            event.latlng.lng.toFixed(6);
 
-    if (coordinatesInput) {
+        selectedCoordinates =
+            `${lat},${lng}`;
 
-        coordinatesInput.value =
-            selectedCoordinates;
+        if (
+            mapCoordinatesInput
+        ) {
+
+            mapCoordinatesInput.value =
+                selectedCoordinates;
+
+        }
 
     }
-});
+);
+
+/*
+==========================================
+SEARCH
+==========================================
+*/
 
 if (searchInput) {
 
@@ -122,7 +218,8 @@ if (searchInput) {
         function() {
 
             const value =
-                this.value.toLowerCase();
+                this.value
+                .toLowerCase();
 
             const cards =
                 document.querySelectorAll(
@@ -144,6 +241,13 @@ if (searchInput) {
 
         }
     );
+
 }
+
+/*
+==========================================
+START
+==========================================
+*/
 
 loadBasePoints();
