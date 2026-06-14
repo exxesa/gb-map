@@ -205,5 +205,58 @@ body{
 
 ::-webkit-scrollbar-thumb{
     background:#374151;
+
+
+@media (max-width: 768px) {
+
+    .left-panel,
+    .right-panel {
+
+        position: fixed;
+
+        top: 0;
+        bottom: 0;
+
+        width: 280px;
+
+        z-index: 2000;
+    }
+
+    .left-panel {
+
+        left: 0;
+    }
+
+    .right-panel {
+
+        right: 0;
+    }
+
+    .left-panel.hidden {
+
+        transform: translateX(-100%);
+        width: 280px;
+        padding: 20px;
+    }
+
+    .right-panel.hidden {
+
+        transform: translateX(100%);
+        width: 280px;
+        padding: 20px;
+    }
+
+    #mapContainer {
+
+        width: 100%;
+    }
+
+    #map {
+
+        width: 100vw;
+        height: 100vh;
+    }
+
+}    
     border-radius:10px;
 }
