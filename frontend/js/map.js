@@ -1,28 +1,11 @@
-const coordinatesText =
-    document.getElementById(
-        "coordinatesText"
-    );
-
 const objectList =
-    document.getElementById(
-        "objectList"
-    );
+    document.getElementById("objectList");
 
 const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
+    document.getElementById("searchInput");
 
 const coordinatesInput =
-    document.getElementById(
-        "coordinates"
-    );
-
-/*
-==========================================
-MAP
-==========================================
-*/
+    document.getElementById("coordinates");
 
 const map =
     L.map("map")
@@ -32,59 +15,20 @@ L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
         maxZoom: 19,
-        attribution:
-            "&copy; OpenStreetMap"
+        attribution: "&copy; OpenStreetMap"
     }
 ).addTo(map);
 
-/*
-==========================================
-GLOBAL VARIABLES
-==========================================
-*/
-
 let selectedCoordinates = null;
-
 let allObjects = [];
-
-let allMarkers = [];
-
-/*
-==========================================
-CATEGORY ICONS
-==========================================
-*/
 
 function getCategoryEmoji(category) {
 
-    switch (category) {
+    if (!category)
+        return "📍";
 
-        case "🏢":
-            return "🏢";
-
-        case "🏭":
-            return "🏭";
-
-        case "⚓":
-            return "⚓";
-
-        case "🛢":
-            return "🛢";
-
-        case "🛰":
-            return "🛰";
-
-        default:
-            return "📍";
-    }
-
+    return category.split(" ")[0];
 }
-
-/*
-==========================================
-LOAD OBJECTS
-==========================================
-*/
 
 async function loadBasePoints() {
 
@@ -94,8 +38,6 @@ async function loadBasePoints() {
     allObjects = data;
 
     objectList.innerHTML = "";
-
-    allMarkers = [];
 
     data.forEach(item => {
 
@@ -123,156 +65,85 @@ async function loadBasePoints() {
                     parseFloat(lat),
                     parseFloat(lng)
                 ],
-                {
-                    icon
-                }
+                { icon }
             )
             .addTo(map)
             .bindPopup(`
                 <h3>${item.name}</h3>
-
-                <p>
-                🌍 ${item.country}
-                </p>
-
-                <p>
-                🏙 ${item.city}
-                </p>
-
-                <p>
-                ${emoji} ${item.category}
-                </p>
-
-                <p>
-                ${item.description}
-                </p>
+                <p>🌍 ${item.country}</p>
+                <p>🏙 ${item.city}</p>
+                <p>${item.category}</p>
+                <p>${item.description}</p>
             `);
-
-        allMarkers.push({
-            marker,
-            item
-        });
 
         objectList.innerHTML += `
             <div class="object-card">
+                <h4>${emoji} ${item.name}</h4>
 
-                <h4>
-                    ${emoji}
-                    ${item.name}
-                </h4>
+                <p>${item.country}</p>
 
-                <p>
-                    ${item.country}
-                </p>
-
-                <button
-                    onclick="
-                        map.flyTo(
-                            [${lat},${lng}],
-                            8
-                        );
-                    ">
-
+                <button onclick="
+                    map.flyTo(
+                        [${lat},${lng}],
+                        12
+                    );
+                    marker.openPopup();
+                ">
                     Go To
-
                 </button>
-
             </div>
         `;
     });
-
 }
 
-/*
-==========================================
-MAP CLICK
-==========================================
-*/
+map.on("click", function(event) {
 
-map.on(
-    "click",
-    function(event) {
+    const lat =
+        event.latlng.lat.toFixed(6);
 
-        const lat =
-            event.latlng.lat.toFixed(6);
+    const lng =
+        event.latlng.lng.toFixed(6);
 
-        const lng =
-            event.latlng.lng.toFixed(6);
+    selectedCoordinates =
+        `${lat},${lng}`;
 
-        selectedCoordinates =
-            `${lat},${lng}`;
+    if (coordinatesInput) {
 
-        coordinatesText.innerHTML =
-            `
-            Latitude: ${lat}<br>
-            Longitude: ${lng}
-            `;
-
-        if (
-            coordinatesInput
-        ) {
-
-            coordinatesInput.value =
-                selectedCoordinates;
-
-        }
+        coordinatesInput.value =
+            selectedCoordinates;
 
     }
-);
+});
 
-/*
-==========================================
-SEARCH
-==========================================
-*/
+if (searchInput) {
 
-searchInput.addEventListener(
-    "input",
-    function() {
+    searchInput.addEventListener(
+        "input",
+        function() {
 
-        const value =
-            this.value.toLowerCase();
+            const value =
+                this.value.toLowerCase();
 
-        const filtered =
-            allObjects.filter(
-                item =>
-                    item.name
-                    .toLowerCase()
-                    .includes(value)
-            );
-
-        objectList.innerHTML = "";
-
-        filtered.forEach(item => {
-
-            const emoji =
-                getCategoryEmoji(
-                    item.category
+            const cards =
+                document.querySelectorAll(
+                    ".object-card"
                 );
 
-            objectList.innerHTML += `
-                <div class="object-card">
+            cards.forEach(card => {
 
-                    <h4>
-                        ${emoji}
-                        ${item.name}
-                    </h4>
+                const text =
+                    card.innerText
+                    .toLowerCase();
 
-                    <p>
-                        ${item.country}
-                    </p>
+                card.style.display =
+                    text.includes(value)
+                    ? "block"
+                    : "none";
 
-                </div>
-            `;
-        });
+            });
 
-    }
-);
-
-/*
-==========================================
-START
-==========================================
-*/
+        }
+    );
+}
 
 loadBasePoints();
