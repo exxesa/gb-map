@@ -1,3 +1,9 @@
+/*
+==========================================
+ELEMENTS
+==========================================
+*/
+
 const saveButton =
     document.getElementById(
         "saveButton"
@@ -53,9 +59,16 @@ const descriptionInput =
         "description"
     );
 
+/*
+==========================================
+SAVE OBJECT
+==========================================
+*/
+
 async function saveBaseObject() {
 
     if (
+        !coordinatesInput ||
         !coordinatesInput.value
     ) {
 
@@ -85,16 +98,20 @@ async function saveBaseObject() {
 
         description:
             descriptionInput.value
+
     };
 
     try {
 
-        await addBaseData(
-            baseData
-        );
+        const result =
+            await addBaseData(
+                baseData
+            );
+
+        console.log(result);
 
         alert(
-            "Object saved"
+            "Object saved successfully"
         );
 
         location.reload();
@@ -104,10 +121,18 @@ async function saveBaseObject() {
         console.error(error);
 
         alert(
-            "Save error"
+            "Error while saving object"
         );
+
     }
+
 }
+
+/*
+==========================================
+SAVE BUTTON
+==========================================
+*/
 
 if (saveButton) {
 
@@ -115,7 +140,14 @@ if (saveButton) {
         "click",
         saveBaseObject
     );
+
 }
+
+/*
+==========================================
+LEFT PANEL BUTTON
+==========================================
+*/
 
 if (
     toggleLeftPanel &&
@@ -124,14 +156,22 @@ if (
 
     toggleLeftPanel.addEventListener(
         "click",
-        () => {
+        function () {
 
             leftPanel.classList.toggle(
                 "hidden"
             );
+
         }
     );
+
 }
+
+/*
+==========================================
+RIGHT PANEL BUTTON
+==========================================
+*/
 
 if (
     toggleRightPanel &&
@@ -140,11 +180,13 @@ if (
 
     toggleRightPanel.addEventListener(
         "click",
-        () => {
+        function () {
 
             rightPanel.classList.toggle(
                 "hidden"
             );
+
         }
     );
+
 }
