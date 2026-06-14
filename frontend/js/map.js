@@ -1,3 +1,9 @@
+/*
+==========================================
+MAP ELEMENTS
+==========================================
+*/
+
 const coordinatesText =
     document.getElementById(
         "coordinatesText"
@@ -7,13 +13,17 @@ const objectList =
     document.getElementById(
         "objectList"
     );
+
 /*
 ==========================================
-WORLD MAP INITIALIZATION
+WORLD MAP
 ==========================================
 */
 
-const map = L.map("map").setView([20, 0], 2);
+const map = L.map("map").setView(
+    [20, 0],
+    2
+);
 
 /*
 ==========================================
@@ -25,93 +35,24 @@ L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
         maxZoom: 19,
-        attribution: "&copy; OpenStreetMap"
+        attribution:
+            "&copy; OpenStreetMap"
     }
 ).addTo(map);
 
 /*
 ==========================================
-LOAD ALL POINTS FROM DATABASE
-==========================================
-*/
-
-async function loadBasePoints() {
-
-    const data =
-        await getBaseData();
-
-    objectList.innerHTML = "";
-
-    data.forEach(item => {
-
-        if (!item.coordinates)
-            return;
-
-        const [lat, lng] =
-            item.coordinates.split(",");
-
-        const marker =
-            L.marker([
-                parseFloat(lat),
-                parseFloat(lng)
-            ])
-            .addTo(map)
-            .bindPopup(`
-                <h3>${item.name}</h3>
-
-                <p>
-                🌍 ${item.country}
-                </p>
-
-                <p>
-                🏙 ${item.city}
-                </p>
-
-                <p>
-                📂 ${item.category}
-                </p>
-
-                <p>
-                ${item.description}
-                </p>
-            `);
-
-        objectList.innerHTML += `
-            <div class="object-card">
-
-                <b>${item.name}</b>
-
-                <p>
-                ${item.country}
-                </p>
-
-                <button
-                    onclick="
-                    map.flyTo(
-                    [${lat},${lng}],
-                    10
-                    );
-                    marker.openPopup();
-                    ">
-
-                    Go To
-
-                </button>
-
-            </div>
-        `;
-
-    });
-
-}
-
-/*
-==========================================
-MAP CLICK EVENT
+SELECTED COORDINATES
 ==========================================
 */
 
 let selectedCoordinates = null;
+
+/*
+==========================================
+MAP CLICK
+==========================================
+*/
 
 map.on("click", function(event) {
 
@@ -124,16 +65,135 @@ map.on("click", function(event) {
     selectedCoordinates =
         `${lat},${lng}`;
 
-    coordinatesText.innerHTML = `
-        Lat: ${lat}<br>
-        Lng: ${lng}
-    `;
+    if (coordinatesText) {
+
+        coordinatesText.innerHTML = `
+            Latitude: ${lat}
+            <br>
+            Longitude: ${lng}
+        `;
+
+    }
 
 });
 
 /*
 ==========================================
-LOAD DATA AFTER MAP START
+LOAD ALL OBJECTS
+==========================================
+*/
+
+async function loadBasePoints() {
+
+    const data =
+        await getBaseData();
+
+    if (objectList) {
+
+        objectList.innerHTML = "";
+
+    }
+
+    data.forEach(item => {
+
+        if (!item.coordinates)
+            return;
+
+        const coordinates =
+            item.coordinates.split(",");
+
+        const lat =
+            parseFloat(
+                coordinates[0]
+            );
+
+        const lng =
+            parseFloat(
+                coordinates[1]
+            );
+
+        const marker =
+            L.marker([
+                lat,
+                lng
+            ]).addTo(map);
+
+        marker.bindPopup(`
+            <h3>${item.name}</h3>
+
+            <p>
+                <b>Country:</b>
+                ${item.country}
+            </p>
+
+            <p>
+                <b>City:</b>
+                ${item.city}
+            </p>
+
+            <p>
+                <b>Category:</b>
+                ${item.category}
+            </p>
+
+            <p>
+                ${item.description}
+            </p>
+        `);
+
+        if (objectList) {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "object-card";
+
+            card.innerHTML = `
+                <h4>
+                    ${item.name}
+                </h4>
+
+                <p>
+                    ${item.country}
+                </p>
+
+                <button>
+                    Go To
+                </button>
+            `;
+
+            card
+                .querySelector("button")
+                .addEventListener(
+                    "click",
+                    () => {
+
+                        map.flyTo(
+                            [lat, lng],
+                            8
+                        );
+
+                        marker.openPopup();
+
+                    }
+                );
+
+            objectList.appendChild(
+                card
+            );
+
+        }
+
+    });
+
+}
+
+/*
+==========================================
+START
 ==========================================
 */
 
