@@ -1,42 +1,75 @@
 /*
 ==========================================
-FORM ELEMENTS
+ELEMENTS
 ==========================================
 */
 
 const saveButton =
-    document.getElementById("saveButton");
+    document.getElementById(
+        "saveButton"
+    );
+
+const toggleLeftPanel =
+    document.getElementById(
+        "toggleLeftPanel"
+    );
+
+const toggleRightPanel =
+    document.getElementById(
+        "toggleRightPanel"
+    );
+
+const leftPanel =
+    document.getElementById(
+        "leftPanel"
+    );
+
+const rightPanel =
+    document.getElementById(
+        "rightPanel"
+    );
 
 const nameInput =
-    document.getElementById("name");
+    document.getElementById(
+        "name"
+    );
 
 const countryInput =
-    document.getElementById("country");
+    document.getElementById(
+        "country"
+    );
 
 const cityInput =
-    document.getElementById("city");
+    document.getElementById(
+        "city"
+    );
 
 const categoryInput =
-    document.getElementById("category");
+    document.getElementById(
+        "category"
+    );
+
+const coordinatesInput =
+    document.getElementById(
+        "coordinates"
+    );
 
 const descriptionInput =
-    document.getElementById("description");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const toggleButton =
-    document.getElementById("toggleSidebarBtn");
+    document.getElementById(
+        "description"
+    );
 
 /*
 ==========================================
-ADD NEW OBJECT
+SAVE OBJECT
 ==========================================
 */
 
 async function saveBaseObject() {
 
-    if (!selectedCoordinates) {
+    if (
+        !coordinatesInput.value
+    ) {
 
         alert(
             "Select a point on the map first"
@@ -47,27 +80,43 @@ async function saveBaseObject() {
 
     const baseData = {
 
-        name: nameInput.value,
+        name:
+            nameInput.value,
 
-        country: countryInput.value,
+        country:
+            countryInput.value,
 
-        city: cityInput.value,
+        city:
+            cityInput.value,
 
-        category: categoryInput.value,
+        category:
+            categoryInput.value,
 
-        coordinates: selectedCoordinates,
+        coordinates:
+            coordinatesInput.value,
 
         description:
             descriptionInput.value
 
     };
 
-    const result =
-        await addBaseData(baseData);
+    try {
 
-    console.log(result);
+        await addBaseData(
+            baseData
+        );
 
-    location.reload();
+        location.reload();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Error saving object"
+        );
+
+    }
 
 }
 
@@ -88,21 +137,19 @@ if (saveButton) {
 
 /*
 ==========================================
-SIDEBAR TOGGLE
+LEFT PANEL
 ==========================================
 */
 
-if (toggleButton) {
+if (toggleLeftPanel) {
 
-    toggleButton.addEventListener(
+    toggleLeftPanel.addEventListener(
         "click",
         () => {
 
-            document
-                .querySelector(".sidebar")
-                .classList.toggle(
-                    "collapsed"
-                );
+            leftPanel.classList.toggle(
+                "hidden"
+            );
 
         }
     );
@@ -111,43 +158,19 @@ if (toggleButton) {
 
 /*
 ==========================================
-SEARCH OBJECTS
+RIGHT PANEL
 ==========================================
 */
 
-if (searchInput) {
+if (toggleRightPanel) {
 
-    searchInput.addEventListener(
-        "keyup",
+    toggleRightPanel.addEventListener(
+        "click",
         () => {
 
-            const value =
-                searchInput.value.toLowerCase();
-
-            const cards =
-                document.querySelectorAll(
-                    ".object-card"
-                );
-
-            cards.forEach(card => {
-
-                if (
-                    card.innerText
-                        .toLowerCase()
-                        .includes(value)
-                ) {
-
-                    card.style.display =
-                        "block";
-
-                } else {
-
-                    card.style.display =
-                        "none";
-
-                }
-
-            });
+            rightPanel.classList.toggle(
+                "hidden"
+            );
 
         }
     );
