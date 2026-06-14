@@ -1,9 +1,3 @@
-/*
-==========================================
-MAP ELEMENTS
-==========================================
-*/
-
 const coordinatesText =
     document.getElementById(
         "coordinatesText"
@@ -14,22 +8,25 @@ const objectList =
         "objectList"
     );
 
+const searchInput =
+    document.getElementById(
+        "searchInput"
+    );
+
+const coordinatesInput =
+    document.getElementById(
+        "coordinates"
+    );
+
 /*
 ==========================================
-WORLD MAP
+MAP
 ==========================================
 */
 
-const map = L.map("map").setView(
-    [20, 0],
-    2
-);
-
-/*
-==========================================
-MAP LAYER
-==========================================
-*/
+const map =
+    L.map("map")
+    .setView([20, 0], 2);
 
 L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -42,44 +39,50 @@ L.tileLayer(
 
 /*
 ==========================================
-SELECTED COORDINATES
+GLOBAL VARIABLES
 ==========================================
 */
 
 let selectedCoordinates = null;
 
+let allObjects = [];
+
+let allMarkers = [];
+
 /*
 ==========================================
-MAP CLICK
+CATEGORY ICONS
 ==========================================
 */
 
-map.on("click", function(event) {
+function getCategoryEmoji(category) {
 
-    const lat =
-        event.latlng.lat.toFixed(6);
+    switch (category) {
 
-    const lng =
-        event.latlng.lng.toFixed(6);
+        case "🏢":
+            return "🏢";
 
-    selectedCoordinates =
-        `${lat},${lng}`;
+        case "🏭":
+            return "🏭";
 
-    if (coordinatesText) {
+        case "⚓":
+            return "⚓";
 
-        coordinatesText.innerHTML = `
-            Latitude: ${lat}
-            <br>
-            Longitude: ${lng}
-        `;
+        case "🛢":
+            return "🛢";
 
+        case "🛰":
+            return "🛰";
+
+        default:
+            return "📍";
     }
 
-});
+}
 
 /*
 ==========================================
-LOAD ALL OBJECTS
+LOAD OBJECTS
 ==========================================
 */
 
@@ -88,71 +91,73 @@ async function loadBasePoints() {
     const data =
         await getBaseData();
 
-    if (objectList) {
+    allObjects = data;
 
-        objectList.innerHTML = "";
+    objectList.innerHTML = "";
 
-    }
+    allMarkers = [];
 
     data.forEach(item => {
 
         if (!item.coordinates)
             return;
 
-        const coordinates =
+        const [lat, lng] =
             item.coordinates.split(",");
 
-        const lat =
-            parseFloat(
-                coordinates[0]
+        const emoji =
+            getCategoryEmoji(
+                item.category
             );
 
-        const lng =
-            parseFloat(
-                coordinates[1]
-            );
+        const icon =
+            L.divIcon({
+                html:
+                    `<div style="font-size:28px">${emoji}</div>`,
+                className: ""
+            });
 
         const marker =
-            L.marker([
-                lat,
-                lng
-            ]).addTo(map);
+            L.marker(
+                [
+                    parseFloat(lat),
+                    parseFloat(lng)
+                ],
+                {
+                    icon
+                }
+            )
+            .addTo(map)
+            .bindPopup(`
+                <h3>${item.name}</h3>
 
-        marker.bindPopup(`
-            <h3>${item.name}</h3>
+                <p>
+                🌍 ${item.country}
+                </p>
 
-            <p>
-                <b>Country:</b>
-                ${item.country}
-            </p>
+                <p>
+                🏙 ${item.city}
+                </p>
 
-            <p>
-                <b>City:</b>
-                ${item.city}
-            </p>
+                <p>
+                ${emoji} ${item.category}
+                </p>
 
-            <p>
-                <b>Category:</b>
-                ${item.category}
-            </p>
-
-            <p>
+                <p>
                 ${item.description}
-            </p>
-        `);
+                </p>
+            `);
 
-        if (objectList) {
+        allMarkers.push({
+            marker,
+            item
+        });
 
-            const card =
-                document.createElement(
-                    "div"
-                );
+        objectList.innerHTML += `
+            <div class="object-card">
 
-            card.className =
-                "object-card";
-
-            card.innerHTML = `
                 <h4>
+                    ${emoji}
                     ${item.name}
                 </h4>
 
@@ -160,36 +165,109 @@ async function loadBasePoints() {
                     ${item.country}
                 </p>
 
-                <button>
-                    Go To
-                </button>
-            `;
-
-            card
-                .querySelector("button")
-                .addEventListener(
-                    "click",
-                    () => {
-
+                <button
+                    onclick="
                         map.flyTo(
-                            [lat, lng],
+                            [${lat},${lng}],
                             8
                         );
+                    ">
 
-                        marker.openPopup();
+                    Go To
 
-                    }
-                );
+                </button>
 
-            objectList.appendChild(
-                card
-            );
-
-        }
-
+            </div>
+        `;
     });
 
 }
+
+/*
+==========================================
+MAP CLICK
+==========================================
+*/
+
+map.on(
+    "click",
+    function(event) {
+
+        const lat =
+            event.latlng.lat.toFixed(6);
+
+        const lng =
+            event.latlng.lng.toFixed(6);
+
+        selectedCoordinates =
+            `${lat},${lng}`;
+
+        coordinatesText.innerHTML =
+            `
+            Latitude: ${lat}<br>
+            Longitude: ${lng}
+            `;
+
+        if (
+            coordinatesInput
+        ) {
+
+            coordinatesInput.value =
+                selectedCoordinates;
+
+        }
+
+    }
+);
+
+/*
+==========================================
+SEARCH
+==========================================
+*/
+
+searchInput.addEventListener(
+    "input",
+    function() {
+
+        const value =
+            this.value.toLowerCase();
+
+        const filtered =
+            allObjects.filter(
+                item =>
+                    item.name
+                    .toLowerCase()
+                    .includes(value)
+            );
+
+        objectList.innerHTML = "";
+
+        filtered.forEach(item => {
+
+            const emoji =
+                getCategoryEmoji(
+                    item.category
+                );
+
+            objectList.innerHTML += `
+                <div class="object-card">
+
+                    <h4>
+                        ${emoji}
+                        ${item.name}
+                    </h4>
+
+                    <p>
+                        ${item.country}
+                    </p>
+
+                </div>
+            `;
+        });
+
+    }
+);
 
 /*
 ==========================================
