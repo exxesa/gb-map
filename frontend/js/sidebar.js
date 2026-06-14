@@ -4,11 +4,6 @@ FORM ELEMENTS
 ==========================================
 */
 
-<div id="objectList"></div>
-
-const addButton =
-    document.getElementById("addButton");
-
 const saveButton =
     document.getElementById("saveButton");
 
@@ -26,6 +21,12 @@ const categoryInput =
 
 const descriptionInput =
     document.getElementById("description");
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const toggleButton =
+    document.getElementById("toggleSidebarBtn");
 
 /*
 ==========================================
@@ -72,7 +73,7 @@ async function saveBaseObject() {
 
 /*
 ==========================================
-SAVE BUTTON EVENT
+SAVE BUTTON
 ==========================================
 */
 
@@ -85,20 +86,70 @@ if (saveButton) {
 
 }
 
-const toggleButton =
-    document.getElementById(
-        "toggleSidebarBtn"
+/*
+==========================================
+SIDEBAR TOGGLE
+==========================================
+*/
+
+if (toggleButton) {
+
+    toggleButton.addEventListener(
+        "click",
+        () => {
+
+            document
+                .querySelector(".sidebar")
+                .classList.toggle(
+                    "collapsed"
+                );
+
+        }
     );
 
-toggleButton.addEventListener(
-    "click",
-    () => {
+}
 
-        document
-        .querySelector(".sidebar")
-        .classList.toggle(
-            "collapsed"
-        );
+/*
+==========================================
+SEARCH OBJECTS
+==========================================
+*/
 
-    }
-);
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "keyup",
+        () => {
+
+            const value =
+                searchInput.value.toLowerCase();
+
+            const cards =
+                document.querySelectorAll(
+                    ".object-card"
+                );
+
+            cards.forEach(card => {
+
+                if (
+                    card.innerText
+                        .toLowerCase()
+                        .includes(value)
+                ) {
+
+                    card.style.display =
+                        "block";
+
+                } else {
+
+                    card.style.display =
+                        "none";
+
+                }
+
+            });
+
+        }
+    );
+
+}
