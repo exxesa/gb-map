@@ -1,9 +1,3 @@
-/*
-==========================================
-ELEMENTS
-==========================================
-*/
-
 const saveButton =
     document.getElementById(
         "saveButton"
@@ -59,12 +53,6 @@ const descriptionInput =
         "description"
     );
 
-/*
-==========================================
-SAVE OBJECT
-==========================================
-*/
-
 async function saveBaseObject() {
 
     if (
@@ -72,7 +60,7 @@ async function saveBaseObject() {
     ) {
 
         alert(
-            "Select a point on the map first"
+            "Click on map first"
         );
 
         return;
@@ -97,13 +85,16 @@ async function saveBaseObject() {
 
         description:
             descriptionInput.value
-
     };
 
     try {
 
         await addBaseData(
             baseData
+        );
+
+        alert(
+            "Object saved"
         );
 
         location.reload();
@@ -113,18 +104,10 @@ async function saveBaseObject() {
         console.error(error);
 
         alert(
-            "Error saving object"
+            "Save error"
         );
-
     }
-
 }
-
-/*
-==========================================
-SAVE BUTTON
-==========================================
-*/
 
 if (saveButton) {
 
@@ -132,16 +115,12 @@ if (saveButton) {
         "click",
         saveBaseObject
     );
-
 }
 
-/*
-==========================================
-LEFT PANEL
-==========================================
-*/
-
-if (toggleLeftPanel) {
+if (
+    toggleLeftPanel &&
+    leftPanel
+) {
 
     toggleLeftPanel.addEventListener(
         "click",
@@ -150,19 +129,14 @@ if (toggleLeftPanel) {
             leftPanel.classList.toggle(
                 "hidden"
             );
-
         }
     );
-
 }
 
-/*
-==========================================
-RIGHT PANEL
-==========================================
-*/
-
-if (toggleRightPanel) {
+if (
+    toggleRightPanel &&
+    rightPanel
+) {
 
     toggleRightPanel.addEventListener(
         "click",
@@ -171,8 +145,6 @@ if (toggleRightPanel) {
             rightPanel.classList.toggle(
                 "hidden"
             );
-
         }
     );
-
 }
